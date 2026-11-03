@@ -1,0 +1,219 @@
+{
+  "product": "Clicky Heart Macaron Keychain",
+  "usageNotice": "Private/internal testing only. Source document states non-commercial personal use and prohibits hosting/distribution/derivatives.",
+  "requiresExternalPart": "Cherry MX compatible switch",
+  "partKeys": {
+    "shell": "Macaron_Shell_Customizable",
+    "cream": "Macaron_Cream_Customizable",
+    "face": "Macaron_Face_Customizable"
+  },
+  "variants": [
+    {
+      "id": "face1",
+      "displayName": "Face 1 - Neutral",
+      "file": "clicky_heart_macaron_face1_customizable.glb",
+      "defaultColors": {
+        "shell": "#F1C0F3",
+        "cream": "#F6F6F3",
+        "face": "#191919"
+      },
+      "dimensionsMm": {
+        "x": 45.4172,
+        "y": 44.3372,
+        "z": 30.7112
+      },
+      "fileBytes": 973868,
+      "geometry": [
+        {
+          "name": "Macaron_Shell_Customizable",
+          "vertices": 23698,
+          "triangles": 47392,
+          "bounds": [
+            [
+              -22.7086,
+              -22.1686,
+              -15.3556
+            ],
+            [
+              22.7086,
+              22.1686,
+              15.3556
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Cream_Customizable",
+          "vertices": 3100,
+          "triangles": 6200,
+          "bounds": [
+            [
+              -19.6197,
+              -19.0935,
+              -4.7164
+            ],
+            [
+              19.6221,
+              15.3928,
+              1.6053
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Face_Customizable",
+          "vertices": 168,
+          "triangles": 324,
+          "bounds": [
+            [
+              -7.5995,
+              -1.0645,
+              14.8556
+            ],
+            [
+              4.9989,
+              2.0985,
+              15.3556
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "face4",
+      "displayName": "Face 4 - Love Eyes",
+      "file": "clicky_heart_macaron_face4_customizable.glb",
+      "defaultColors": {
+        "shell": "#433344",
+        "cream": "#F6F6F3",
+        "face": "#A0A0A0"
+      },
+      "dimensionsMm": {
+        "x": 45.4172,
+        "y": 44.3372,
+        "z": 30.7112
+      },
+      "fileBytes": 976048,
+      "geometry": [
+        {
+          "name": "Macaron_Shell_Customizable",
+          "vertices": 23727,
+          "triangles": 47450,
+          "bounds": [
+            [
+              -22.7086,
+              -22.1686,
+              -15.3556
+            ],
+            [
+              22.7086,
+              22.1686,
+              15.3556
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Cream_Customizable",
+          "vertices": 3100,
+          "triangles": 6200,
+          "bounds": [
+            [
+              -19.6197,
+              -19.0935,
+              -4.7164
+            ],
+            [
+              19.6221,
+              15.3928,
+              1.6053
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Face_Customizable",
+          "vertices": 200,
+          "triangles": 388,
+          "bounds": [
+            [
+              -7.6866,
+              -0.6732,
+              14.9556
+            ],
+            [
+              7.6935,
+              3.0597,
+              15.3556
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "face6",
+      "displayName": "Face 6 - Happy Eyes",
+      "file": "clicky_heart_macaron_face6_customizable.glb",
+      "defaultColors": {
+        "shell": "#433344",
+        "cream": "#F6F6F3",
+        "face": "#A0A0A0"
+      },
+      "dimensionsMm": {
+        "x": 45.4172,
+        "y": 44.3372,
+        "z": 30.7112
+      },
+      "fileBytes": 980692,
+      "geometry": [
+        {
+          "name": "Macaron_Shell_Customizable",
+          "vertices": 23792,
+          "triangles": 47580,
+          "bounds": [
+            [
+              -22.7086,
+              -22.1686,
+              -15.3556
+            ],
+            [
+              22.7086,
+              22.1686,
+              15.3556
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Cream_Customizable",
+          "vertices": 3100,
+          "triangles": 6200,
+          "bounds": [
+            [
+              -19.6197,
+              -19.0935,
+              -4.7164
+            ],
+            [
+              19.6221,
+              15.3928,
+              1.6053
+            ]
+          ]
+        },
+        {
+          "name": "Macaron_Face_Customizable",
+          "vertices": 264,
+          "triangles": 516,
+          "bounds": [
+            [
+              -5.5941,
+              -0.2062,
+              14.9556
+            ],
+            [
+              8.77,
+              2.4916,
+              15.3556
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

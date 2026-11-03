@@ -1,0 +1,125 @@
+{
+  "displayName": "Cute Flexi Baby Dragon",
+  "sourceFiles": [
+    "dragon_v4.3mf",
+    "dragon_v41.stl"
+  ],
+  "units": "millimeter",
+  "orientation": "Y-up",
+  "selectedColorLayout": "sky-accent variant",
+  "models": {
+    "toy": {
+      "file": "cute_flexi_baby_dragon_toy_customizable.glb",
+      "sizeXMm": 58.545,
+      "sizeYMm": 23.794,
+      "sizeZMm": 139.985,
+      "triangles": 1016761,
+      "bytes": 18227092,
+      "parts": [
+        {
+          "partName": "Thân chính",
+          "partKey": "Dragon_Main_Body_Customizable",
+          "customizable": true,
+          "defaultColor": "#AE96D4",
+          "triangles": 670579
+        },
+        {
+          "partName": "Mắt và chi tiết đen",
+          "partKey": "Dragon_Dark_Details_Customizable",
+          "customizable": true,
+          "defaultColor": "#000000",
+          "triangles": 26804
+        },
+        {
+          "partName": "Bụng, sừng và chi tiết trắng",
+          "partKey": "Dragon_White_Details_Customizable",
+          "customizable": true,
+          "defaultColor": "#FFFFFF",
+          "triangles": 127002
+        },
+        {
+          "partName": "Gai, cánh và điểm nhấn xanh",
+          "partKey": "Dragon_Sky_Accents_Customizable",
+          "customizable": true,
+          "defaultColor": "#A3D8E1",
+          "triangles": 174160
+        },
+        {
+          "partName": "Điểm nhấn hồng",
+          "partKey": "Dragon_Pink_Accents_Customizable",
+          "customizable": true,
+          "defaultColor": "#E8AFCF",
+          "triangles": 18216
+        }
+      ]
+    },
+    "keychain": {
+      "file": "cute_flexi_baby_dragon_keychain_customizable.glb",
+      "sizeXMm": 58.545,
+      "sizeYMm": 38.774,
+      "sizeZMm": 145.076,
+      "triangles": 1019833,
+      "bytes": 18283232,
+      "parts": [
+        {
+          "partName": "Thân chính",
+          "partKey": "Dragon_Main_Body_Customizable",
+          "customizable": true,
+          "defaultColor": "#AE96D4",
+          "triangles": 670579
+        },
+        {
+          "partName": "Mắt và chi tiết đen",
+          "partKey": "Dragon_Dark_Details_Customizable",
+          "customizable": true,
+          "defaultColor": "#000000",
+          "triangles": 26804
+        },
+        {
+          "partName": "Bụng, sừng và chi tiết trắng",
+          "partKey": "Dragon_White_Details_Customizable",
+          "customizable": true,
+          "defaultColor": "#FFFFFF",
+          "triangles": 127002
+        },
+        {
+          "partName": "Gai, cánh và điểm nhấn xanh",
+          "partKey": "Dragon_Sky_Accents_Customizable",
+          "customizable": true,
+          "defaultColor": "#A3D8E1",
+          "triangles": 174160
+        },
+        {
+          "partName": "Điểm nhấn hồng",
+          "partKey": "Dragon_Pink_Accents_Customizable",
+          "customizable": true,
+          "defaultColor": "#E8AFCF",
+          "triangles": 18216
+        },
+        {
+          "partName": "Vòng móc khóa",
+          "partKey": "Dragon_Keyring_Locked",
+          "customizable": false,
+          "defaultColor": "#B8BDC5",
+          "triangles": 3072
+        }
+      ]
+    }
+  },
+  "rawTrianglesByColor": {
+    "1": 3377509,
+    "2": 33108,
+    "3": 300796,
+    "4": 339192,
+    "5": 20480,
+    "0": 3072
+  },
+  "reducedTrianglesByColor": {
+    "1": 670579,
+    "2": 26804,
+    "3": 127002,
+    "4": 174160,
+    "5": 18216,
+    "0": 3072
+  }
+}

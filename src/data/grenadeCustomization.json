@@ -1,0 +1,175 @@
+{
+  "displayName": "Grenade Stash Keychain Container",
+  "sourceFile": "grenade_container.3mf",
+  "recommendedModel": "grenade_stash_tight_pin_customizable.glb",
+  "variants": [
+    {
+      "variant": "tight-pin",
+      "file": "grenade_stash_tight_pin_customizable.glb",
+      "pinSource": "Grenade_Pin_Tight.step",
+      "dimensionsMm": {
+        "x": 49.0,
+        "y": 89.0,
+        "z": 57.499
+      },
+      "triangles": 112570,
+      "fileBytes": 2032336,
+      "parts": [
+        {
+          "partName": "Vỏ ngoài",
+          "meshName": "Grenade_Outer_Customizable",
+          "materialName": "MAT_Grenade_Outer_Dark",
+          "role": "outer",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Outer.step",
+          "vertices": 3942,
+          "triangles": 7908
+        },
+        {
+          "partName": "Ruột hộp chứa",
+          "meshName": "Grenade_Container_Customizable",
+          "materialName": "MAT_Grenade_Container_Red",
+          "role": "container",
+          "customizable": true,
+          "defaultColor": "#E53935",
+          "sourcePart": "Grenade_Container.step",
+          "vertices": 13101,
+          "triangles": 26198
+        },
+        {
+          "partName": "Khớp nối",
+          "meshName": "Grenade_Connector_Customizable",
+          "materialName": "MAT_Grenade_Connector_Dark",
+          "role": "connector",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Connector.step",
+          "vertices": 8980,
+          "triangles": 17956
+        },
+        {
+          "partName": "Nắp",
+          "meshName": "Grenade_Lid_Customizable",
+          "materialName": "MAT_Grenade_Lid_Dark",
+          "role": "lid",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Lid.step",
+          "vertices": 29651,
+          "triangles": 59306
+        },
+        {
+          "partName": "Cần gạt",
+          "meshName": "Grenade_Spoon_Customizable",
+          "materialName": "MAT_Grenade_Spoon_Red",
+          "role": "spoon",
+          "customizable": true,
+          "defaultColor": "#E53935",
+          "sourcePart": "Grenade_Spoon.step",
+          "vertices": 367,
+          "triangles": 734
+        },
+        {
+          "partName": "Chốt",
+          "meshName": "Grenade_Pin_Customizable",
+          "materialName": "MAT_Grenade_Pin_Dark",
+          "role": "pin",
+          "customizable": true,
+          "defaultColor": "#2B2B2B",
+          "sourcePart": "Grenade_Pin_Tight.step",
+          "vertices": 234,
+          "triangles": 468
+        }
+      ]
+    },
+    {
+      "variant": "loose-pin",
+      "file": "grenade_stash_loose_pin_customizable.glb",
+      "pinSource": "Grenade_Pin_Loose.step",
+      "dimensionsMm": {
+        "x": 49.0,
+        "y": 89.0,
+        "z": 57.499
+      },
+      "triangles": 112580,
+      "fileBytes": 2032500,
+      "parts": [
+        {
+          "partName": "Vỏ ngoài",
+          "meshName": "Grenade_Outer_Customizable",
+          "materialName": "MAT_Grenade_Outer_Dark",
+          "role": "outer",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Outer.step",
+          "vertices": 3942,
+          "triangles": 7908
+        },
+        {
+          "partName": "Ruột hộp chứa",
+          "meshName": "Grenade_Container_Customizable",
+          "materialName": "MAT_Grenade_Container_Red",
+          "role": "container",
+          "customizable": true,
+          "defaultColor": "#E53935",
+          "sourcePart": "Grenade_Container.step",
+          "vertices": 13101,
+          "triangles": 26198
+        },
+        {
+          "partName": "Khớp nối",
+          "meshName": "Grenade_Connector_Customizable",
+          "materialName": "MAT_Grenade_Connector_Dark",
+          "role": "connector",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Connector.step",
+          "vertices": 8980,
+          "triangles": 17956
+        },
+        {
+          "partName": "Nắp",
+          "meshName": "Grenade_Lid_Customizable",
+          "materialName": "MAT_Grenade_Lid_Dark",
+          "role": "lid",
+          "customizable": true,
+          "defaultColor": "#202124",
+          "sourcePart": "Grenade_Lid.step",
+          "vertices": 29651,
+          "triangles": 59306
+        },
+        {
+          "partName": "Cần gạt",
+          "meshName": "Grenade_Spoon_Customizable",
+          "materialName": "MAT_Grenade_Spoon_Red",
+          "role": "spoon",
+          "customizable": true,
+          "defaultColor": "#E53935",
+          "sourcePart": "Grenade_Spoon.step",
+          "vertices": 367,
+          "triangles": 734
+        },
+        {
+          "partName": "Chốt",
+          "meshName": "Grenade_Pin_Customizable",
+          "materialName": "MAT_Grenade_Pin_Dark",
+          "role": "pin",
+          "customizable": true,
+          "defaultColor": "#2B2B2B",
+          "sourcePart": "Grenade_Pin_Loose.step",
+          "vertices": 239,
+          "triangles": 478
+        }
+      ]
+    }
+  ],
+  "sourceColors": [
+    "#FF0000",
+    "#161616"
+  ],
+  "notes": [
+    "The model does not include a physical metal keyring mesh.",
+    "Tight pin is the default web preview; loose pin is supplied as an alternative."
+  ]
+}

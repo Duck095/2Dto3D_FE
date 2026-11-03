@@ -1,0 +1,111 @@
+{
+  "model": "babycarrot_customizable.glb",
+  "displayName": "Baby Carrot",
+  "units": "millimeter",
+  "frontDirection": "+Z",
+  "upDirection": "+Y",
+  "customizableParts": {
+    "body": {
+      "meshName": "Carrot_Body_Customizable",
+      "materialName": "MAT_Body_Orange_Customizable",
+      "defaultColor": "#FF8000"
+    },
+    "top": {
+      "meshName": "Carrot_Top_Customizable",
+      "materialName": "MAT_Top_Green_Customizable",
+      "defaultColor": "#00E122"
+    }
+  },
+  "lockedParts": {
+    "eyesWhite": "Eyes_White_Locked",
+    "pupilsBlack": "Pupils_Black_Locked"
+  },
+  "geometry": [
+    {
+      "meshName": "Carrot_Body_Customizable",
+      "materialName": "MAT_Body_Orange_Customizable",
+      "role": "body",
+      "customizable": true,
+      "defaultColor": "#FF8000",
+      "vertices": 35292,
+      "triangles": 69732,
+      "bounds": [
+        [
+          -36.314339,
+          -11.928713,
+          -7.885737
+        ],
+        [
+          22.32004,
+          11.928713,
+          7.354522
+        ]
+      ]
+    },
+    {
+      "meshName": "Carrot_Top_Customizable",
+      "materialName": "MAT_Top_Green_Customizable",
+      "role": "top",
+      "customizable": true,
+      "defaultColor": "#00E122",
+      "vertices": 30548,
+      "triangles": 61100,
+      "bounds": [
+        [
+          14.506959,
+          -5.833606,
+          -7.885549
+        ],
+        [
+          36.314339,
+          5.820255,
+          2.254263
+        ]
+      ]
+    },
+    {
+      "meshName": "Eyes_White_Locked",
+      "materialName": "MAT_Eyes_White_Locked",
+      "role": "eyes_white",
+      "customizable": false,
+      "defaultColor": "#F5F5F5",
+      "vertices": 13952,
+      "triangles": 26760,
+      "bounds": [
+        [
+          13.001414,
+          -10.483643,
+          4.712393
+        ],
+        [
+          20.523251,
+          10.483515,
+          7.461605
+        ]
+      ]
+    },
+    {
+      "meshName": "Pupils_Black_Locked",
+      "materialName": "MAT_Pupils_Black_Locked",
+      "role": "pupils",
+      "customizable": false,
+      "defaultColor": "#121212",
+      "vertices": 8066,
+      "triangles": 15868,
+      "bounds": [
+        [
+          14.524107,
+          -8.659548,
+          6.877681
+        ],
+        [
+          19.128119,
+          8.659395,
+          7.885737
+        ]
+      ]
+    }
+  ],
+  "totalTriangles": 173460,
+  "totalFileBytes": 3139940
+}

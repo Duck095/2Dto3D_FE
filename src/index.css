@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== BASE LAYER ===== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply min-h-screen overflow-x-hidden bg-pocket-paper text-pocket-plum font-sans text-base leading-relaxed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    @apply border-none bg-transparent cursor-pointer font-sans;
+    color: inherit;
+  }
+
+  input, textarea, select {
+    font-family: inherit;
+  }
+
+  input, textarea, select {
+    color: var(--joy-ink);
+  }
+
+  input[type="checkbox"], input[type="radio"], input[type="range"] {
+    accent-color: var(--joy-ink);
+  }
+
+  img {
+    @apply max-w-full block;
+  }
+
+  ul, ol {
+    @apply list-none;
+  }
+
+  /* ── Remove default focus ring so focus-visible takes over ── */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--joy-pink);
+    color: var(--joy-ink);
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== COMPONENT LAYER ===== */
+
+@layer components {
+  /* Pocket Joy plum and lavender text accent */
+  .gradient-text {
+    @apply inline;
+    background: linear-gradient(135deg, var(--joy-ink), #80689f, #b78aa7);
+    background-size: 200% 200%;
+    animation: gradient-shift 6s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Shared Pocket Joy primary button */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 font-bold text-white overflow-hidden whitespace-nowrap transition-all duration-300 rounded-xl px-6 py-3;
+    background: var(--joy-ink);
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.2),
+      0 6px 24px rgb(var(--joy-ink-rgb) / .2);
+    border: 1px solid rgb(var(--joy-ink-rgb) / .12);
+  }
+
+  .btn-primary:hover {
+    @apply -translate-y-0.5;
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.3),
+      0 10px 36px rgb(var(--joy-ink-rgb) / .26);
+    background: var(--joy-ink-strong);
+  }
+
+  .btn-primary:active {
+    @apply translate-y-0;
+    transform: scale(0.98);
+  }
+
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0;
+    transform: translateX(-110%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: buttonShine 5s ease-in-out infinite;
+  }
+
+  /* Shared Pocket Joy secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 backdrop-blur-md font-bold whitespace-nowrap transition-all duration-300 rounded-xl px-6 py-3;
+    background: var(--joy-surface);
+    color: var(--joy-ink);
+    border: 1.5px solid rgb(var(--joy-lavender-rgb) / .8);
+    box-shadow: var(--joy-shadow-sm);
+  }
+
+  .btn-secondary:hover {
+    @apply -translate-y-0.5;
+    background: var(--joy-lavender-soft);
+    border-color: var(--joy-lavender);
+    box-shadow: var(--joy-shadow-md);
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+
+  .joy-container {
+    width: min(var(--joy-container), calc(100% - var(--joy-page-gutter) * 2));
+    margin-inline: auto;
+  }
+
+  .joy-card {
+    border: 1px solid var(--joy-line);
+    border-radius: var(--joy-radius-lg);
+    background: var(--joy-surface);
+    box-shadow: var(--joy-shadow-sm);
+  }
+
+  .joy-field {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--joy-line);
+    border-radius: var(--joy-radius-sm);
+    background: var(--joy-surface);
+    padding: 0.65rem 0.8rem;
+    color: var(--joy-ink);
+    font: inherit;
+  }
+
+  .joy-field::placeholder { color: var(--joy-muted); }
+  .joy-field:focus-visible { outline: var(--joy-focus-width) solid var(--joy-focus-light); outline-offset: var(--joy-focus-offset); }
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes buttonShine {
+  0%, 65% { transform: translateX(-115%); }
+  85%, 100% { transform: translateX(115%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes progressBreathe {
+  0%, 100% { width: 70%; filter: saturate(1); }
+  50% { width: 86%; filter: saturate(1.4); }
+}
+
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-pocket-paper;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full;
+  background: rgb(var(--joy-lavender-rgb) / .85);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--joy-ink);
+}
+
+/* ===== RANGE SLIDER (AI Studio) ===== */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--joy-ink);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgb(var(--joy-ink-rgb) / .28);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgb(var(--joy-ink-rgb) / .35);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--joy-ink);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgb(var(--joy-ink-rgb) / .28);
+  cursor: pointer;
+}
+
+/* ===== SCROLLBAR-HIDE UTILITY ===== */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== NOISE OVERLAY (subtle grain texture) ===== */
+
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Unlayered so focus indicators stay visible over Tailwind outline utilities. */
+:where(body) :focus-visible {
+  outline: var(--joy-focus-width) solid var(--joy-focus-light);
+  outline-offset: var(--joy-focus-offset);
+}
+
+input[type="range"]:focus-visible {
+  outline: var(--joy-focus-width) solid var(--joy-focus-light);
+  outline-offset: var(--joy-focus-offset);
+}
+
+.joy-focus-dark :where(:focus-visible),
+.joy-focus-dark:focus-visible {
+  outline-color: var(--joy-focus-dark);
+}

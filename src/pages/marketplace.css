@@ -1,0 +1,98 @@
+.joy-shop {
+  min-height: 70vh;
+  padding: 72px 0 88px;
+  overflow: hidden;
+  background: var(--joy-paper);
+  color: var(--joy-ink);
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+}
+.joy-shop__wrap,.joy-shop__main { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+.joy-shop__hero { position: relative; padding: 54px 0 58px; border-bottom: 1px solid var(--joy-line); background: linear-gradient(110deg, #fff4f7 0%, var(--joy-paper) 61%, #f4f0ff 100%); }
+.joy-shop__eyebrow,.joy-shop__kicker { color: #92718e; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+.joy-shop__eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 11px; border: 1px solid #e9dce8; border-radius: 99px; background: #fff; }
+.joy-shop__eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: #dc7d9f; }
+.joy-shop__hero h1 { max-width: 700px; margin: 22px 0 14px; font-size: clamp(44px,7vw,78px); font-weight: 800; letter-spacing: -.065em; line-height: .95; }
+.joy-shop__hero h1 span { color: #c56d91; }
+.joy-shop__hero p { max-width: 520px; margin: 0; color: #756a7b; font-size: 15px; line-height: 1.7; }
+.joy-shop__hero-note { display: inline-block; margin-top: 20px; color: #8a7796; font-size: 12px; font-weight: 700; }
+.joy-shop__hero-art { position: absolute; top: 44px; right: max(calc((100vw - 1160px)/2 + 34px), 9%); width: 225px; height: 205px; display: grid; place-items: center; border: 1px solid #eadcf0; border-radius: 48% 52% 50% 42%; background: #e8defb; color: var(--joy-ink); transform: rotate(7deg); }
+.joy-shop__hero-art i { display: grid; width: 120px; height: 148px; place-items: center; border: 4px solid var(--joy-ink); border-radius: 44% 44% 32% 32%; background: var(--joy-pink); box-shadow: 7px 8px 0 #49345f; font-size: 25px; font-style: normal; font-weight: 800; line-height: .9; text-align: center; }
+.joy-shop__hero-art b { position: absolute; top: 10px; right: 22px; color: #bc7b9d; font-size: 28px; }
+.joy-shop__hero-art small { position: absolute; bottom: 11px; color: #756a7b; font-size: 8px; font-weight: 800; letter-spacing: .1em; }
+.joy-shop__main { padding-top: 46px; }
+.joy-shop__section-heading,.joy-shop__catalog-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+.joy-shop__section-heading h2,.joy-shop__catalog-heading h2 { margin: 7px 0 0; font-size: clamp(28px,4vw,39px); font-weight: 800; letter-spacing: -.055em; line-height: 1; }
+.joy-shop__section-heading h2 span,.joy-shop__catalog-heading h2 span { color: #d47a9d; }
+.joy-shop__active-collection { color: #906986; font-size: 12px; font-weight: 750; }
+.joy-shop__collection-list { display: flex; gap: 9px; margin: 22px -2px 0; padding: 2px 2px 9px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #ddcce3 transparent; }
+.joy-shop__collection-list button { min-height: 42px; flex: 0 0 auto; padding: 0 17px; border: 1px solid #e8dfe9; border-radius: 99px; background: #fff; color: #6f6476; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .16s,color .16s,border-color .16s; }
+.joy-shop__collection-list button:hover { border-color: #cdb8dc; background: #f7f2ff; }
+.joy-shop__collection-list button.is-active { border-color: var(--joy-ink); background: var(--joy-ink); color: #fff; }
+.joy-shop__collection-list button:focus-visible,.joy-shop button:focus-visible,.joy-shop a:focus-visible,.joy-shop input:focus-visible,.joy-shop select:focus-visible { outline: var(--joy-focus-width) solid var(--joy-focus-light); outline-offset: var(--joy-focus-offset); }
+.joy-shop__collection-description { margin: 0; color: var(--joy-muted); font-size: 12px; }
+.joy-shop__catalog { margin-top: 56px; }
+.joy-shop__result-count { padding: 8px 12px; border-radius: 99px; background: #f4eff8; color: #786b82; font-size: 11px; font-weight: 750; }
+.joy-shop__toolbar { display: flex; align-items: center; gap: 10px; margin: 21px 0 24px; padding: 12px; border: 1px solid #eee8ef; border-radius: 19px; background: #fff; box-shadow: 0 8px 30px #49345f09; }
+.joy-shop__search { min-width: 0; min-height: 44px; display: flex; flex: 1; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid #eee8ef; border-radius: 12px; background: #fffcff; }
+.joy-shop__search > span:first-child { color: #9a82a6; font-size: 23px; }
+.joy-shop__search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--joy-ink); font: inherit; font-size: 13px; }
+.joy-shop__search input::placeholder { color: #a39aa9; }
+.joy-shop__sort { display: flex; align-items: center; gap: 8px; padding-inline: 5px; color: #857a8b; font-size: 11px; font-weight: 700; }
+.joy-shop__sort select { max-width: 150px; min-height: 40px; border: 0; border-radius: 9px; background: #f8f5f9; color: var(--joy-ink); font: inherit; font-size: 11px; }
+.joy-shop-button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; border: 1px solid transparent; border-radius: 99px; font: inherit; font-size: 12px; font-weight: 750; text-decoration: none; cursor: pointer; transition: transform .16s,background .16s,border-color .16s; }
+.joy-shop-button:hover { transform: translateY(-1px); }
+.joy-shop-button--primary { background: var(--joy-ink); color: #fff; }
+.joy-shop-button--primary:hover { background: #624777; }
+.joy-shop-button--secondary { border-color: #dfd5e2; background: #fff; color: var(--joy-ink); }
+.joy-shop-button--secondary:hover { border-color: #cbb9d6; background: #faf6ff; }
+.joy-shop__grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
+.joy-shop__empty { position: relative; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; overflow: hidden; padding: 36px 24px; border: 1px dashed #d7c9dd; border-radius: 26px; background: linear-gradient(135deg,#fff 0%,#fff8fb 58%,#f8f4ff 100%); text-align: center; }
+.joy-shop__empty-icon { width: 53px; height: 53px; display: grid; place-items: center; margin-bottom: 3px; border-radius: 18px; background: var(--joy-lavender); color: var(--joy-ink); font-size: 28px; }
+.joy-shop__empty .joy-shop__kicker { color: #aa7993; font-size: 9px; }
+.joy-shop__empty h3 { margin: 0; font-size: clamp(19px,3vw,25px); font-weight: 800; letter-spacing: -.035em; }
+.joy-shop__empty p { max-width: 480px; margin: 0 0 5px; color: #7c7180; font-size: 12px; line-height: 1.7; }
+.joy-shop__empty-stamp { position: absolute; right: 28px; bottom: 20px; color: #d9c9d9; font-size: 9px; font-weight: 800; letter-spacing: .15em; line-height: 1.5; text-align: center; transform: rotate(-8deg); }
+.joy-shop__load-more { display: flex; justify-content: center; margin-top: 30px; }
+@media (max-width: 980px) {
+  .joy-shop__hero-art { right: 8%; transform: scale(.84) rotate(7deg); }
+  .joy-shop__grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+}
+@media (max-width: 720px) {
+  .joy-shop { padding-top: 64px; }
+  .joy-shop__wrap,.joy-shop__main { width: min(100% - 36px,560px); }
+  .joy-shop__hero { padding: 42px 0 44px; }
+  .joy-shop__hero-art { right: -26px; top: 50px; opacity: .38; transform: scale(.66) rotate(7deg); transform-origin: top right; }
+  .joy-shop__hero h1,.joy-shop__hero p,.joy-shop__hero-note,.joy-shop__eyebrow { position: relative; z-index: 1; }
+  .joy-shop__hero h1 { max-width: 430px; font-size: clamp(45px,11vw,64px); }
+  .joy-shop__hero p { max-width: 390px; font-size: 13px; }
+  .joy-shop__main { padding-top: 36px; }
+  .joy-shop__section-heading h2,.joy-shop__catalog-heading h2 { font-size: 30px; }
+  .joy-shop__catalog { margin-top: 43px; }
+  .joy-shop__toolbar { flex-wrap: wrap; }
+  .joy-shop__search { flex-basis: calc(100% - 112px); }
+  .joy-shop__toolbar > .joy-shop-button { flex: 1; }
+  .joy-shop__sort { width: 100%; justify-content: flex-end; }
+  .joy-shop__sort select { flex: 1; }
+  .joy-shop__grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .joy-product-card__body { padding: 12px; }
+  .joy-product-card__description { min-height: 52px; }
+  .joy-product-card__actions { flex-direction: column; }
+  .joy-shop__empty-stamp { display: none; }
+}
+@media (max-width: 430px) {
+  .joy-shop__wrap,.joy-shop__main { width: calc(100% - 30px); }
+  .joy-shop__hero-art { opacity: .25; }
+  .joy-shop__eyebrow { font-size: 8px; }
+  .joy-shop__section-heading,.joy-shop__catalog-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .joy-shop__grid { grid-template-columns: 1fr; }
+  .joy-product-card { display: grid; grid-template-columns: 116px minmax(0,1fr); align-items: stretch; }
+  .joy-product-card__media { height: 100%; min-height: 190px; aspect-ratio: auto; }
+  .joy-product-card__placeholder > span { width: 58px; height: 74px; font-size: 22px; }
+  .joy-product-card__placeholder small { max-width: 80px; text-align: center; font-size: 6px; }
+  .joy-product-card__body { display: flex; flex-direction: column; justify-content: center; padding: 13px 11px; }
+  .joy-product-card__actions .joy-shop-button { min-height: 38px; }
+  .joy-product-card__description { min-height: 0; margin-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .joy-shop *, .joy-shop *::before, .joy-shop *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

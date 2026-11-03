@@ -1,0 +1,173 @@
+{
+  "model": "captain_america_shield_keychain_customizable.glb",
+  "displayName": "Captain America's Shield Keychain",
+  "units": "millimeter",
+  "dimensionsMm": {
+    "x": 60.0,
+    "y": 59.9999,
+    "z": 9.3001
+  },
+  "frontDirection": "+Z",
+  "customizableParts": {
+    "back": {
+      "meshName": "Shield_Back_Customizable",
+      "materialName": "MAT_Shield_Back_Customizable",
+      "partName": "Mặt sau",
+      "defaultColor": "#30343B"
+    },
+    "red_rings": {
+      "meshName": "Shield_Red_Customizable",
+      "materialName": "MAT_Shield_Red_Customizable",
+      "partName": "Các vòng màu đỏ",
+      "defaultColor": "#D62828"
+    },
+    "white_ring": {
+      "meshName": "Shield_White_Customizable",
+      "materialName": "MAT_Shield_White_Customizable",
+      "partName": "Vòng màu trắng",
+      "defaultColor": "#F5F5F5"
+    },
+    "blue_center": {
+      "meshName": "Shield_Blue_Customizable",
+      "materialName": "MAT_Shield_Blue_Customizable",
+      "partName": "Tâm màu xanh",
+      "defaultColor": "#1E5AA8"
+    },
+    "star": {
+      "meshName": "Shield_Star_Customizable",
+      "materialName": "MAT_Shield_Star_Customizable",
+      "partName": "Ngôi sao",
+      "defaultColor": "#D7DCE2"
+    }
+  },
+  "geometry": [
+    {
+      "meshName": "Shield_Back_Customizable",
+      "materialName": "MAT_Shield_Back_Customizable",
+      "partName": "Mặt sau",
+      "role": "back",
+      "customizable": true,
+      "defaultColor": "#30343B",
+      "colorName": "Đen than",
+      "vertices": 79548,
+      "triangles": 26516,
+      "bounds": [
+        [
+          -29.997553,
+          -29.999945,
+          -4.650138
+        ],
+        [
+          29.997549,
+          29.999944,
+          -2.050002
+        ]
+      ],
+      "sourceFile": "caps_shield_back.stl"
+    },
+    {
+      "meshName": "Shield_Red_Customizable",
+      "materialName": "MAT_Shield_Red_Customizable",
+      "partName": "Các vòng màu đỏ",
+      "role": "red_rings",
+      "customizable": true,
+      "defaultColor": "#D62828",
+      "colorName": "Đỏ khiên",
+      "vertices": 562788,
+      "triangles": 187596,
+      "bounds": [
+        [
+          -30.0,
+          -29.999001,
+          -2.050002
+        ],
+        [
+          30.000002,
+          29.999001,
+          2.515998
+        ]
+      ],
+      "sourceFile": "caps_shield_red.stl"
+    },
+    {
+      "meshName": "Shield_White_Customizable",
+      "materialName": "MAT_Shield_White_Customizable",
+      "partName": "Vòng màu trắng",
+      "role": "white_ring",
+      "customizable": true,
+      "defaultColor": "#F5F5F5",
+      "colorName": "Trắng",
+      "vertices": 196854,
+      "triangles": 65618,
+      "bounds": [
+        [
+          -25.381178,
+          -25.949865,
+          -1.05003
+        ],
+        [
+          25.381176,
+          24.949999,
+          1.165062
+        ]
+      ],
+      "sourceFile": "caps_shield_white.stl"
+    },
+    {
+      "meshName": "Shield_Blue_Customizable",
+      "materialName": "MAT_Shield_Blue_Customizable",
+      "partName": "Tâm màu xanh",
+      "role": "blue_center",
+      "customizable": true,
+      "defaultColor": "#1E5AA8",
+      "colorName": "Xanh dương",
+      "vertices": 99984,
+      "triangles": 33328,
+      "bounds": [
+        [
+          -15.950001,
+          -15.949964,
+          0.949848
+        ],
+        [
+          15.950001,
+          15.949961,
+          3.906059
+        ]
+      ],
+      "sourceFile": "caps_shield_blue.stl"
+    },
+    {
+      "meshName": "Shield_Star_Customizable",
+      "materialName": "MAT_Shield_Star_Customizable",
+      "partName": "Ngôi sao",
+      "role": "star",
+      "customizable": true,
+      "defaultColor": "#D7DCE2",
+      "colorName": "Bạc",
+      "vertices": 54,
+      "triangles": 18,
+      "bounds": [
+        [
+          -10.652184,
+          -9.061629,
+          2.149659
+        ],
+        [
+          10.651487,
+          11.199968,
+          4.649998
+        ]
+      ],
+      "sourceFile": "caps_shield_star.stl"
+    }
+  ],
+  "totalTriangles": 313076,
+  "totalFileBytes": 15035948,
+  "license": {
+    "type": "CC BY-NC 4.0",
+    "commercialUse": false,
+    "attributionRequired": true,
+    "note": "Use this conversion only for internal/non-commercial testing unless separate commercial permission is obtained."
+  }
+}

@@ -1,0 +1,121 @@
+.joy-detail { min-height: 70vh; padding: 76px 0 90px; background: var(--joy-paper); color: var(--joy-ink); font-family: 'Outfit','Segoe UI',sans-serif; }
+.joy-detail__breadcrumbs,.joy-detail__top,.joy-detail__information,.joy-detail__reviews,.joy-detail__related { width: min(1160px,calc(100% - 48px)); margin-inline: auto; }
+.joy-detail__breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; padding: 2px 0 22px; color: #a093a7; font-size: 11px; }
+.joy-detail__breadcrumbs a { color: #806d89; text-decoration: none; }
+.joy-detail__breadcrumbs a:hover { color: #b25f85; text-decoration: underline; text-underline-offset: 3px; }
+.joy-detail__breadcrumbs [aria-current=page] { max-width: 55%; overflow: hidden; color: #51425e; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
+.joy-detail__top { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); align-items: start; gap: clamp(28px,6vw,76px); padding: 16px 0 64px; }
+.joy-detail__gallery { min-width: 0; }
+.joy-detail__stage { position: relative; display: grid; min-height: 300px; aspect-ratio: 1 / .94; overflow: hidden; place-items: center; border: 1px solid #eee4ed; border-radius: 28px; background: linear-gradient(145deg,#fff 4%,#faf4fb 58%,#f0eaff 100%); box-shadow: 0 16px 48px #49345f0c; }
+.joy-detail__main-image,.joy-detail__video { width: 100%; height: 100%; object-fit: contain; }
+.joy-detail__video { background: #261b31; }
+.joy-detail__media-empty { width: 100%; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 25px; color: #7d6b89; text-align: center; }
+.joy-detail__media-empty > span { width: 74px; height: 88px; display: grid; place-items: center; border: 3px solid #80688d; border-radius: 45% 45% 34% 34%; background: var(--joy-pink); box-shadow: 5px 6px 0 #49345f; color: #9b6280; font-size: 28px; }
+.joy-detail__media-empty strong { color: var(--joy-ink); font-size: 14px; }
+.joy-detail__media-empty small { color: #94899a; font-size: 10px; }
+.joy-detail__model-viewer { width: 100%; height: 100%; min-height: 400px; }
+.joy-detail__loading { color: #7b6a88; font-size: 12px; }
+.joy-detail__media-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 13px; }
+.joy-detail__media-controls > button { min-width: 52px; min-height: 46px; overflow: hidden; border: 1px solid #e8dfe9; border-radius: 12px; background: white; color: var(--joy-ink); cursor: pointer; }
+.joy-detail__media-controls > button.is-active { border-color: #b67598; box-shadow: 0 0 0 2px #f3d5e3; }
+.joy-detail__media-controls > button:not(.joy-detail__media-chip) { width: 56px; height: 52px; }
+.joy-detail__media-controls img { width: 100%; height: 100%; object-fit: cover; }
+.joy-detail__media-chip { padding: 0 14px; font: inherit; font-size: 10px; font-weight: 750; }
+.joy-detail__media-chip span { margin-left: 3px; color: #998a9d; font-weight: 500; }
+.joy-detail__media-note { margin: 12px 0 0; color: #928899; font-size: 10px; }
+.joy-detail__summary { min-width: 0; padding: 8px 0; }
+.joy-detail__eyebrows { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+.joy-detail__eyebrows span { padding: 7px 10px; border-radius: 99px; background: #f4eff9; color: #7b648a; font-size: 9px; font-weight: 750; }
+.joy-detail__kicker { color: #a77a94; font-size: 9px; font-weight: 800; letter-spacing: .13em; }
+.joy-detail__summary h1 { margin: 10px 0 14px; font-size: clamp(30px,4vw,48px); font-weight: 800; letter-spacing: -.055em; line-height: 1.02; overflow-wrap: anywhere; }
+.joy-detail__description { margin: 0; color: #756b7e; font-size: 13px; line-height: 1.75; white-space: pre-line; }
+.joy-detail__price-row { display: flex; align-items: center; min-height: 58px; margin: 14px 0 20px; border-bottom: 1px solid var(--joy-line); }
+.joy-detail__price { color: #a9537a; font-size: 23px; font-weight: 800; }
+.joy-detail__price-note { color: #89808d; font-size: 12px; font-weight: 650; }
+.joy-detail__option-group { margin: 0 0 18px; padding: 0; border: 0; }
+.joy-detail__option-group legend,.joy-detail__material > span { margin-bottom: 9px; color: #5d5067; font-size: 11px; font-weight: 800; }
+.joy-detail__options { display: flex; flex-wrap: wrap; gap: 8px; }
+.joy-detail__options button { min-height: 40px; display: inline-flex; align-items: center; gap: 7px; padding: 0 13px; border: 1px solid #e5dbe7; border-radius: 12px; background: #fff; color: #6d6175; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+.joy-detail__options button.is-active { border-color: #ba7697; background: #fff5f8; color: #8c4d6b; box-shadow: 0 0 0 2px #f5deea; }
+.joy-detail__options button i { width: 14px; height: 14px; border: 1px solid #0002; border-radius: 50%; }
+.joy-detail__material { display: grid; gap: 5px; margin-bottom: 18px; }
+.joy-detail__material select { min-height: 44px; padding: 0 12px; border: 1px solid #e7dfe9; border-radius: 12px; background: #fff; color: var(--joy-ink); font: inherit; font-size: 12px; }
+.joy-detail__purchase { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 8px; margin-top: 16px; }
+.joy-detail__quantity { min-height: 47px; display: flex; align-items: center; border: 1px solid #e7dfe9; border-radius: 99px; background: #fff; }
+.joy-detail__quantity button { width: 36px; height: 44px; border: 0; background: transparent; color: var(--joy-ink); font-size: 18px; cursor: pointer; }
+.joy-detail__quantity button:disabled { color: #c8c0cd; cursor: not-allowed; }
+.joy-detail__quantity output { min-width: 20px; color: #5d5067; font-size: 12px; font-weight: 750; text-align: center; }
+.joy-detail__button { min-height: 47px; display: inline-flex; align-items: center; justify-content: center; padding: 0 15px; border: 1px solid transparent; border-radius: 99px; font: inherit; font-size: 11px; font-weight: 800; text-decoration: none; cursor: pointer; transition: background .16s,transform .16s; }
+.joy-detail__button:hover { transform: translateY(-1px); }
+.joy-detail__button--primary { background: var(--joy-ink); color: white; }
+.joy-detail__button--primary:hover { background: #624777; }
+.joy-detail__button--secondary { border-color: #d9c9df; background: white; color: var(--joy-ink); }
+.joy-detail__button--secondary:hover { background: #faf5ff; }
+.joy-detail__availability { margin: 18px 0 0; padding: 13px 15px; border: 1px dashed #ddcfe0; border-radius: 14px; background: #fff9fc; color: #806f89; font-size: 11px; line-height: 1.6; }
+.joy-detail__trust-note { display: flex; align-items: start; gap: 9px; margin-top: 18px; color: #8a7e91; }
+.joy-detail__trust-note > span { color: #c57d9d; }
+.joy-detail__trust-note p { margin: 0; font-size: 10px; line-height: 1.5; }
+.joy-detail__information,.joy-detail__reviews,.joy-detail__related { padding-top: 48px; border-top: 1px solid var(--joy-line); }
+.joy-detail__section-heading { position: relative; margin-bottom: 20px; }
+.joy-detail__section-heading h2 { margin: 7px 0 0; font-size: clamp(25px,3.5vw,36px); font-weight: 800; letter-spacing: -.05em; }
+.joy-detail__section-heading h2 span { color: #d47a9d; }
+.joy-detail__section-heading > a { position: absolute; right: 0; bottom: 4px; color: #805c8c; font-size: 11px; font-weight: 750; text-decoration: none; }
+.joy-detail__section-heading > a:hover { text-decoration: underline; }
+.joy-detail__information-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.joy-detail__description-card,.joy-detail__facts-card { padding: 21px; border: 1px solid #eee6ef; border-radius: 20px; background: #fff; }
+.joy-detail__description-card h3,.joy-detail__facts-card h3 { margin: 0 0 9px; color: #5d4b6b; font-size: 13px; font-weight: 800; }
+.joy-detail__description-card p { margin: 0; color: #7c7181; font-size: 12px; line-height: 1.7; white-space: pre-line; }
+.joy-detail__facts-card dl { display: grid; gap: 0; margin: 0; }
+.joy-detail__facts-card dl > div { display: flex; justify-content: space-between; gap: 20px; padding: 9px 0; border-bottom: 1px solid #f1ebf2; font-size: 11px; }
+.joy-detail__facts-card dl > div:last-child { border-bottom: 0; }
+.joy-detail__facts-card dt { color: #918595; }
+.joy-detail__facts-card dd { margin: 0; color: #5c5064; font-weight: 700; text-align: right; }
+.joy-detail__reviews,.joy-detail__related { margin-top: 42px; }
+.joy-detail__review-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.joy-detail__review { padding: 16px; border: 1px solid #eee6ef; border-radius: 16px; background: white; }
+.joy-detail__review > div { display: flex; justify-content: space-between; gap: 12px; color: #5c5064; font-size: 11px; }
+.joy-detail__review > div span { color: #ac6889; font-weight: 750; }
+.joy-detail__review p { margin: 10px 0 0; color: #7c7181; font-size: 11px; line-height: 1.6; }
+.joy-detail__related-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+.joy-detail__unavailable { display: grid; min-height: 68vh; place-items: center; padding: 80px 20px; }
+.joy-detail__unavailable-card { width: min(100%,520px); display: flex; flex-direction: column; align-items: center; padding: 42px 28px; border: 1px dashed #d9c9df; border-radius: 28px; background: linear-gradient(140deg,#fff,#fff6fa 62%,#f5f0ff); text-align: center; }
+.joy-detail__doodle { width: 65px; height: 65px; display: grid; place-items: center; margin-bottom: 19px; border-radius: 22px; background: var(--joy-lavender); color: var(--joy-ink); font-size: 32px; }
+.joy-detail__unavailable-card h1 { margin: 10px 0; font-size: clamp(24px,5vw,36px); font-weight: 800; letter-spacing: -.045em; }
+.joy-detail__unavailable-card p { max-width: 360px; margin: 0 0 22px; color: #7d7183; font-size: 12px; line-height: 1.65; }
+.joy-detail__button:focus-visible,.joy-detail a:focus-visible,.joy-detail button:focus-visible,.joy-detail select:focus-visible { outline: var(--joy-focus-width) solid var(--joy-focus-light); outline-offset: var(--joy-focus-offset); }
+@media(max-width:900px) {
+  .joy-detail__top { grid-template-columns: minmax(0,1fr) minmax(0,.9fr); gap: 28px; }
+  .joy-detail__purchase { grid-template-columns: 1fr 1fr; }
+  .joy-detail__quantity { grid-column: 1 / -1; width: fit-content; }
+  .joy-detail__related-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:680px) {
+  .joy-detail { padding-top: 70px; }
+  .joy-detail__breadcrumbs,.joy-detail__top,.joy-detail__information,.joy-detail__reviews,.joy-detail__related { width: min(100% - 36px,560px); }
+  .joy-detail__breadcrumbs { padding-bottom: 16px; font-size: 10px; }
+  .joy-detail__top { grid-template-columns: 1fr; gap: 22px; padding-top: 4px; padding-bottom: 42px; }
+  .joy-detail__stage { min-height: 280px; aspect-ratio: 1 / .86; border-radius: 22px; }
+  .joy-detail__model-viewer { min-height: 320px; }
+  .joy-detail__summary { padding: 0; }
+  .joy-detail__summary h1 { font-size: clamp(29px,8vw,42px); }
+  .joy-detail__purchase { grid-template-columns: auto 1fr; }
+  .joy-detail__purchase .joy-detail__button--secondary { grid-column: 1 / -1; }
+  .joy-detail__information,.joy-detail__reviews,.joy-detail__related { padding-top: 34px; }
+  .joy-detail__information-grid { grid-template-columns: 1fr; }
+  .joy-detail__review-grid { grid-template-columns: 1fr; }
+  .joy-detail__related-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+  .joy-detail__section-heading > a { position: static; display: inline-block; margin-top: 8px; }
+}
+@media(max-width:430px) {
+  .joy-detail__breadcrumbs,.joy-detail__top,.joy-detail__information,.joy-detail__reviews,.joy-detail__related { width: calc(100% - 30px); }
+  .joy-detail__top { gap: 18px; }
+  .joy-detail__media-empty { min-height: 250px; }
+  .joy-detail__media-controls { gap: 6px; }
+  .joy-detail__media-chip { padding-inline: 10px; font-size: 9px; }
+  .joy-detail__related-grid { grid-template-columns: 1fr; }
+  .joy-detail__purchase { grid-template-columns: 1fr 1fr; }
+  .joy-detail__purchase .joy-detail__button { padding-inline: 9px; font-size: 10px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .joy-detail *,.joy-detail *::before,.joy-detail *::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; animation-iteration-count:1!important; }
+}
