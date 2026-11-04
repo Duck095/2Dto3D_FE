@@ -98,9 +98,15 @@ jobs:
           qa_admin_password="$(openssl rand -hex 32)"
           qa_staff_email="e2e-staff-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}@example.test"
           qa_staff_password="$(openssl rand -hex 32)"
+          qa_create_staff_email="e2e-create-staff-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}@example.test"
+          qa_create_staff_password="$(openssl rand -hex 32)"
+          qa_user_email="e2e-user-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}@example.test"
+          qa_user_password="$(openssl rand -hex 32)"
           qa_employee_number="E2E-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 
-          for value in "$db_password" "$jwt_secret" "$qa_admin_password" "$qa_staff_password"; do
+          for value in "$db_password" "$jwt_secret" "$qa_admin_email" "$qa_admin_password" \
+            "$qa_staff_email" "$qa_staff_password" "$qa_create_staff_email" "$qa_create_staff_password" \
+            "$qa_user_email" "$qa_user_password"; do
             echo "::add-mask::$value"
           done
 
@@ -123,6 +129,10 @@ jobs:
             echo "QA_ADMIN_PASSWORD=$qa_admin_password"
             echo "QA_STAFF_EMAIL=$qa_staff_email"
             echo "QA_STAFF_PASSWORD=$qa_staff_password"
+            echo "QA_CREATE_STAFF_EMAIL=$qa_create_staff_email"
+            echo "QA_CREATE_STAFF_PASSWORD=$qa_create_staff_password"
+            echo "QA_USER_EMAIL=$qa_user_email"
+            echo "QA_USER_PASSWORD=$qa_user_password"
             echo "QA_EMPLOYEE_NUMBER=$qa_employee_number"
             echo 'E2E_BACKEND_API_URL=http://127.0.0.1:8080/api'
             echo 'BACKEND_PORT=8080'
@@ -228,7 +238,7 @@ jobs:
           node scripts/sanitize-staff-e2e-log.mjs "$RUNNER_TEMP/staff-e2e-vite.log"
           exit 1
 
-      - name: Run the single real Edge E2E scenario
+      - name: Run the real Edge Staff E2E scenarios
         working-directory: 2Dto3D_FE
         run: npm run test:e2e
 
