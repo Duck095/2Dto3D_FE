@@ -1,0 +1,247 @@
+name: Staff E2E (Edge)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      backend_ref:
+        description: Backend branch main or a full 40-character commit SHA
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  staff-e2e:
+    name: ADMIN staff directory on Microsoft Edge
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out Frontend
+        uses: actions/checkout@v7
+        with:
+          path: 2Dto3D_FE
+          persist-credentials: false
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 2Dto3D_FE/package-lock.json
+
+      - name: Check out public Backend at the requested ref
+        env:
+          BACKEND_REF: ${{ inputs.backend_ref || 'main' }}
+        run: |
+          set -euo pipefail
+          if [[ "$BACKEND_REF" != "main" && ! "$BACKEND_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "backend_ref must be main or a full 40-character commit SHA."
+            exit 1
+          fi
+
+          if [[ "$BACKEND_REF" == "main" ]]; then
+            git clone --depth 1 --branch main --single-branch \
+              https://github.com/Duck095/2Dto3D_BE.git 2Dto3D_BE
+          else
+            git clone --filter=blob:none --no-checkout \
+              https://github.com/Duck095/2Dto3D_BE.git 2Dto3D_BE
+            git -C 2Dto3D_BE fetch --depth 1 origin "$BACKEND_REF"
+            git -C 2Dto3D_BE checkout --detach FETCH_HEAD
+          fi
+
+          frontend_sha="$(git -C 2Dto3D_FE rev-parse HEAD)"
+          backend_sha="$(git -C 2Dto3D_BE rev-parse HEAD)"
+          if [[ "$BACKEND_REF" != "main" && "${BACKEND_REF,,}" != "$backend_sha" ]]; then
+            echo "The checked out Backend SHA does not match backend_ref."
+            exit 1
+          fi
+          echo "::notice title=E2E source revisions::FE=$frontend_sha BE=$backend_sha"
+          printf '### E2E source revisions\n- Frontend: %s\n- Backend: %s\n' \
+            "$frontend_sha" "$backend_sha" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: 2Dto3D_BE/pom.xml
+
+      - name: Install Frontend dependencies
+        working-directory: 2Dto3D_FE
+        run: npm ci
+
+      - name: Install Microsoft Edge Stable and Linux dependencies
+        working-directory: 2Dto3D_FE
+        run: |
+          npx playwright install-deps msedge
+          npx playwright install msedge
+
+      - name: Create isolated PostgreSQL QA database
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          image='postgres@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea'
+          db_password="$(openssl rand -hex 32)"
+          jwt_secret="$(openssl rand -hex 32)"
+          qa_admin_email="e2e-admin-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}@example.test"
+          qa_admin_password="$(openssl rand -hex 32)"
+          qa_staff_email="e2e-staff-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}@example.test"
+          qa_staff_password="$(openssl rand -hex 32)"
+          qa_employee_number="E2E-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+          for value in "$db_password" "$jwt_secret" "$qa_admin_password" "$qa_staff_password"; do
+            echo "::add-mask::$value"
+          done
+
+          docker pull "$image"
+          docker run --detach --name staff-e2e-postgres \
+            --publish 127.0.0.1:5432:5432 \
+            --env POSTGRES_DB=morphia3d \
+            --env POSTGRES_USER=postgres \
+            --env POSTGRES_PASSWORD="$db_password" \
+            --health-cmd='pg_isready -U postgres -d morphia3d' \
+            --health-interval=5s --health-timeout=3s --health-retries=24 \
+            "$image" > /dev/null
+
+          {
+            echo "QA_DB_PASSWORD=$db_password"
+            echo "DB_PASSWORD=$db_password"
+            echo 'DB_URL=jdbc:postgresql://127.0.0.1:5432/morphia3d'
+            echo "JWT_SECRET=$jwt_secret"
+            echo "QA_ADMIN_EMAIL=$qa_admin_email"
+            echo "QA_ADMIN_PASSWORD=$qa_admin_password"
+            echo "QA_STAFF_EMAIL=$qa_staff_email"
+            echo "QA_STAFF_PASSWORD=$qa_staff_password"
+            echo "QA_EMPLOYEE_NUMBER=$qa_employee_number"
+            echo 'E2E_BACKEND_API_URL=http://127.0.0.1:8080/api'
+            echo 'BACKEND_PORT=8080'
+            echo 'SPRING_PROFILES_ACTIVE=local'
+            echo 'VITE_DEMO_MODE=false'
+            echo 'VNPAY_CODE=E2E_NOT_USED'
+            echo 'VNPAY_SECRET=E2E_NOT_USED'
+            echo 'MOMO_PARTNER_CODE=E2E_NOT_USED'
+            echo 'MOMO_ACCESS_KEY=E2E_NOT_USED'
+            echo 'MOMO_SECRET_KEY=E2E_NOT_USED'
+            echo 'CLOUD_NAME=E2E_NOT_USED'
+            echo 'API_KEY=E2E_NOT_USED'
+            echo 'API_SECRET=E2E_NOT_USED'
+          } >> "$GITHUB_ENV"
+
+          for attempt in $(seq 1 75); do
+            state="$(docker inspect --format='{{.State.Health.Status}}' staff-e2e-postgres)"
+            if [[ "$state" == 'healthy' ]]; then
+              echo 'PostgreSQL QA database is ready.'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'PostgreSQL QA database did not become healthy.'
+          exit 1
+
+      - name: Verify Maven Wrapper 3.9.9
+        working-directory: 2Dto3D_BE
+        run: grep -Fx 'distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.9/apache-maven-3.9.9-bin.zip' .mvn/wrapper/maven-wrapper.properties
+
+      - name: Apply Flyway V1, V2 and V3 migrations
+        working-directory: 2Dto3D_BE
+        run: |
+          bash ./mvnw --batch-mode --no-transfer-progress \
+            -Dflyway.url="$DB_URL" \
+            -Dflyway.user=postgres \
+            -Dflyway.password="$DB_PASSWORD" \
+            flyway:migrate
+
+      - name: Package Backend without rerunning its separate CI test suite
+        working-directory: 2Dto3D_BE
+        run: bash ./mvnw --batch-mode --no-transfer-progress -DskipTests package
+
+      - name: Start Backend and verify readiness
+        working-directory: 2Dto3D_BE
+        env:
+          SPRING_PROFILES_ACTIVE: local
+          VNPAY_CODE: E2E_NOT_USED
+          VNPAY_SECRET: E2E_NOT_USED
+          MOMO_PARTNER_CODE: E2E_NOT_USED
+          MOMO_ACCESS_KEY: E2E_NOT_USED
+          MOMO_SECRET_KEY: E2E_NOT_USED
+          CLOUD_NAME: E2E_NOT_USED
+          API_KEY: E2E_NOT_USED
+          API_SECRET: E2E_NOT_USED
+        run: |
+          set -euo pipefail
+          if [[ ! -d .mvn-target ]]; then
+            echo 'Backend build output directory .mvn-target was not found.'
+            exit 1
+          fi
+          jar="$(find .mvn-target -maxdepth 1 -type f -name 'morphia-3d-*.jar' ! -name '*.original' -print -quit)"
+          if [[ -z "$jar" ]]; then
+            echo 'Packaged Backend JAR was not found in .mvn-target.'
+            exit 1
+          fi
+          java -jar "$jar" > "$RUNNER_TEMP/staff-e2e-backend.log" 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/staff-e2e-backend.pid"
+
+          for attempt in $(seq 1 60); do
+            if curl --silent --show-error --fail http://127.0.0.1:8080/api/auth/ping > /dev/null 2>&1; then
+              echo 'Backend readiness endpoint returned HTTP 200.'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Backend readiness failed; sanitized startup diagnostics follow.'
+          node ../2Dto3D_FE/scripts/sanitize-staff-e2e-log.mjs "$RUNNER_TEMP/staff-e2e-backend.log"
+          exit 1
+
+      - name: Create one-time QA users and staff profile through real APIs
+        working-directory: 2Dto3D_FE
+        run: node scripts/staff-e2e-qa-bootstrap.mjs
+
+      - name: Start Vite with the sibling Backend proxy
+        working-directory: 2Dto3D_FE
+        env:
+          BACKEND_PORT: 8080
+          VITE_DEMO_MODE: 'false'
+        run: |
+          set -euo pipefail
+          node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --no-open \
+            > "$RUNNER_TEMP/staff-e2e-vite.log" 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/staff-e2e-vite.pid"
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:3000/login > /dev/null; then
+              echo 'Vite login route is ready.'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Vite did not become ready.'
+          node scripts/sanitize-staff-e2e-log.mjs "$RUNNER_TEMP/staff-e2e-vite.log"
+          exit 1
+
+      - name: Run the single real Edge E2E scenario
+        working-directory: 2Dto3D_FE
+        run: npm run test:e2e
+
+      - name: Stop QA processes and remove PostgreSQL
+        if: always()
+        run: |
+          set +e
+          if [[ -f "$RUNNER_TEMP/staff-e2e-vite.pid" ]]; then
+            kill "$(cat "$RUNNER_TEMP/staff-e2e-vite.pid")" 2>/dev/null
+          fi
+          if [[ -f "$RUNNER_TEMP/staff-e2e-backend.pid" ]]; then
+            kill "$(cat "$RUNNER_TEMP/staff-e2e-backend.pid")" 2>/dev/null
+          fi
+          docker rm --force staff-e2e-postgres > /dev/null 2>&1
+          rm -f "$RUNNER_TEMP/staff-e2e-vite.pid" "$RUNNER_TEMP/staff-e2e-backend.pid" \
+            "$RUNNER_TEMP/staff-e2e-vite.log" "$RUNNER_TEMP/staff-e2e-backend.log"

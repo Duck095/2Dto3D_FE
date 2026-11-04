@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:all": "bash ./run-all.sh",
     "test": "node --test",
+    "test:e2e": "playwright test --config=playwright.e2e.config.js",
     "test:crossrepo": "node scripts/ci-crossrepo-check.js",
     "build": "vite build",
     "preview": "vite preview"
@@ -23,6 +24,7 @@
     "three": "^0.170.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
