@@ -26,7 +26,7 @@ test('mobile dialog isolates background from keyboard and assistive technology',
 test('leaving the mobile breakpoint closes the drawer and keeps focus visible on desktop', () => {
   assert.ok(layout.includes("matchMedia('(max-width: 767px)')"));
   assert.ok(layout.includes("addEventListener('change', handleViewportChange)"));
-  assert.ok(layout.includes('if (!event.matches) {\n        setMobileNavOpen(false);'));
+  assert.match(layout, /if \(!event\.matches\) \{\r?\n\s*setMobileNavOpen\(false\);/);
   assert.ok(layout.includes("querySelector('.admin-brand')?.focus()"));
 });
 
