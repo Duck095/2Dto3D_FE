@@ -79,7 +79,7 @@ test('ADMIN login and staff directory survive one page reload', async ({ page })
   const identityResponsePromise = page.waitForResponse(response => isApiRequest(response.request(), IDENTITY_API_PATH));
 
   await page.getByLabel('Địa chỉ email').fill(adminEmail);
-  await page.getByLabel('Mật khẩu').fill(adminPassword);
+  await page.locator('input#auth-password').fill(adminPassword);
   await page.getByRole('button', { name: 'Đăng nhập' }).click();
 
   const [loginResponse, identityResponse] = await Promise.all([
