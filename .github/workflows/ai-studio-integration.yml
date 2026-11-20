@@ -192,8 +192,8 @@ jobs:
         if: always()
         shell: bash
         env:
-          FE_SHA: ${{ inputs.fe_sha }}
-          BE_SHA: ${{ inputs.be_sha }}
+          FE_SHA: ${{ github.event_name == 'push' && github.sha || inputs.fe_sha }}
+          BE_SHA: ${{ env.BE_SHA }}
           MIGRATION_OUTCOME: ${{ steps.migrations.outcome }}
           FOCUSED_BE_OUTCOME: ${{ steps.focused-be.outcome }}
           REAL_HTTP_OUTCOME: ${{ steps.real-http-e2e.outcome }}
@@ -220,7 +220,6 @@ jobs:
           name: ai-studio-integration-evidence-${{ github.run_id }}
           if-no-files-found: warn
           path: |
-            ${{ runner.temp }}/ai-studio-ci-evidence
             ${{ runner.temp }}/ai-studio-ci-evidence
 
       - name: Stop test processes and remove disposable files
