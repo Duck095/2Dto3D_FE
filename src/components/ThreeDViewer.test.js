@@ -38,6 +38,12 @@ test('color, size, and AI edit tools remain available under their existing permi
     assert.match(viewer, /label: 'Chỉnh bằng văn bản hoặc ảnh'/);
 });
 
+test('Design Project viewer preserves the source GLB materials when requested', () => {
+    assert.match(viewer, /preserveOriginalMaterials = false/);
+    assert.match(viewer, /if \(preserveOriginalMaterials\) return;/);
+    assert.match(viewer, /preserveOriginalMaterials=\{preserveOriginalMaterials\}/);
+});
+
 test('viewer reports confirmed color and scale changes through the parent callback without prop-effect callbacks', () => {
     assert.match(viewer, /onCustomizationChange/);
     assert.match(viewer, /function emitCustomizationChange/);
@@ -54,4 +60,11 @@ test('parent customization overrides are applied without emitting a callback loo
 
 test('model URL changes reset viewer dimensions even when backend dimensions are unchanged', () => {
     assert.match(viewer, /setProductDimensions\(baseDimensionsCm\);\s*\}, \[baseDimensionsCm, resolvedModelUrl\]\);/);
+});
+
+test('design workflow validates GLB geometry and reports viewer load failure', () => {
+    assert.match(viewer, /requireRenderableGLB && !hasUsableDesignModelScene\(gltf\.scene\)/);
+    assert.match(viewer, /if \(requireRenderableGLB\) onModelLoadState\?\.\(\{ phase: 'ready' \}\)/);
+    assert.match(viewer, /componentDidCatch\(error\)\s*\{\s*this\.props\.onLoadError\?\.\(error\);/);
+    assert.match(viewer, /onLoadError=\{requireRenderableGLB \? \(error\) => onModelLoadState\?\.\(\{ phase: 'error', error \}\) : undefined\}/);
 });

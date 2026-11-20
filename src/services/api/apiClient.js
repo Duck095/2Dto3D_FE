@@ -8,9 +8,9 @@
 // ─────────────────────────────────────────────
 
 import axios from 'axios';
-import { config } from '../../app/config';
-import { getStoredToken } from '../../utils/authToken';
-import { AUTH_IDENTITY_REVALIDATION_EVENT, shouldRevalidateIdentityOn401 } from './auth401Policy';
+import { config } from '../../app/config.js';
+import { getStoredToken } from '../../utils/authToken.js';
+import { AUTH_IDENTITY_REVALIDATION_EVENT, shouldRevalidateIdentityOn401 } from './auth401Policy.js';
 
 const apiClient = axios.create({
   baseURL: config.apiBaseUrl,

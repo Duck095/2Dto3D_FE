@@ -10,6 +10,7 @@ import { USDZExporter } from 'three/examples/jsm/exporters/USDZExporter';
 import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getStoredToken } from '../utils/authToken';
+import { hasUsableDesignModelScene } from '../features/ai-studio/projectWorkflowPresentation.js';
 import { getViewerModelScale } from '../features/ai-studio/studioPresentation';
 
 /* ─── Preset color swatches ──────────────────────────────── */
@@ -288,13 +289,21 @@ function GLBModel({
     onSelectPart,
     onModelReady,
     onPartsReady,
+    preserveOriginalMaterials,
+    requireRenderableGLB,
+    onModelLoadState,
 }) {
     const configureLoader = useCallback(loader => {
         const token = url.startsWith('/api/') ? getStoredToken() : null;
         loader.setRequestHeader(token ? { Authorization: `Bearer ${token}` } : {});
     }, [url]);
     const gltf = useLoader(GLTFLoader, url, configureLoader);
-    const preparedModel = useMemo(() => prepareGLBModel(gltf.scene), [gltf]);
+    const preparedModel = useMemo(() => {
+        if (requireRenderableGLB && !hasUsableDesignModelScene(gltf.scene)) {
+            throw new Error('The GLB scene has no valid renderable mesh geometry.');
+        }
+        return prepareGLBModel(gltf.scene);
+    }, [gltf, requireRenderableGLB]);
 
     useEffect(() => {
         const meshIds = [];
@@ -303,9 +312,11 @@ function GLBModel({
         });
         onPartsReady?.(meshIds);
         onModelReady?.(preparedModel.model);
-    }, [onModelReady, onPartsReady, preparedModel]);
+        if (requireRenderableGLB) onModelLoadState?.({ phase: 'ready' });
+    }, [onModelReady, onPartsReady, onModelLoadState, preparedModel, requireRenderableGLB]);
 
     useEffect(() => {
+        if (preserveOriginalMaterials) return;
         const hasNamedCustomParts = Object.keys(partColors).length > 0;
         preparedModel.model.traverse(child => {
             if (!child.isMesh) return;
@@ -324,7 +335,7 @@ function GLBModel({
                 material.needsUpdate = true;
             });
         });
-    }, [color, customizationMode, partColors, preparedModel, selectedPartId]);
+    }, [color, customizationMode, partColors, preparedModel, preserveOriginalMaterials, selectedPartId]);
 
     const overallScale = [
         preparedModel.baseScale * (modelScale.x / 100),
@@ -373,6 +384,10 @@ class ModelErrorBoundary extends Component {
         }
     }
 
+    componentDidCatch(error) {
+        this.props.onLoadError?.(error);
+    }
+
     render() {
         if (!this.state.error) return this.props.children;
 
@@ -413,6 +428,7 @@ export default function ThreeDViewer({
     presentationMode = false,
     fixedExportFormat,
     allowColorCustomization = true,
+    preserveOriginalMaterials = false,
     allowDimensionCustomization = true,
     allowSegmentedCustomization = true,
     allowDownload = true,
@@ -422,6 +438,8 @@ export default function ThreeDViewer({
     externalSelectedPartId,
     externalModelScale,
     onCustomizationChange,
+    requireRenderableGLB = false,
+    onModelLoadState,
 }) {
     const resolvedModelUrl = modelUrl || stlUrl;
     const isGLBModel = /\.glb(?:$|[?#])/i.test(resolvedModelUrl || '');
@@ -1076,6 +1094,7 @@ export default function ThreeDViewer({
             <ModelErrorBoundary
                 resetKey={`${resolvedModelUrl || 'empty'}:${loadAttempt}`}
                 onRetry={() => setLoadAttempt(current => current + 1)}
+                onLoadError={requireRenderableGLB ? (error) => onModelLoadState?.({ phase: 'error', error }) : undefined}
             >
             <Canvas
                 camera={{ position: [0, 0, 5], fov: 45 }}
@@ -1107,6 +1126,9 @@ export default function ThreeDViewer({
                                     onSelectPart={presentationMode ? undefined : selectPart}
                                     onModelReady={setSourceModel}
                                     onPartsReady={setDetectedPartIds}
+                                    preserveOriginalMaterials={preserveOriginalMaterials}
+                                    requireRenderableGLB={requireRenderableGLB}
+                                    onModelLoadState={onModelLoadState}
                                 />
                             ) : (
                                 <STLModel

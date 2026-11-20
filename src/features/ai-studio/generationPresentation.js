@@ -6,10 +6,9 @@ const METADATA_FIELDS = [
     ['Dimensions', 'dimensions'],
     ['Faces', 'faces'],
     ['Vertices', 'vertices'],
-    ['Quality', 'quality'],
 ];
 
-const GENERATION_PENDING_STATUSES = new Set(['queued', 'processing']);
+const GENERATION_PENDING_STATUSES = new Set(['pending', 'queued', 'processing']);
 const GENERATION_FAILED_STATUSES = new Set(['failed']);
 const GENERATION_COMPLETE_STATUSES = new Set(['completed']);
 const PENDING_GENERATION_STORAGE_PREFIX = '2dto3d.ai-studio.pending-generation';
@@ -100,6 +99,13 @@ export function generationResultsReducer(state, action) {
                 ))],
             };
         }
+        case 'history-loaded': {
+            if (state?.ownerKey !== action.ownerKey || !Array.isArray(action.history)) return state;
+            const history = action.history.map(item => resolveGenerationResponse(item))
+                .filter(result => result.state === 'completed')
+                .map(result => result.generation);
+            return { ...state, history };
+        }
         case 'select-history': {
             if (state?.ownerKey !== action.ownerKey) return state;
             const key = action.generation?.id ?? action.generation?.modelUrl;
@@ -121,6 +127,8 @@ export function generationSubmissionReducer(state, action) {
             return action.state || initialGenerationSubmissionState;
         case 'submit':
             if (state.status === 'pending' || state.status === 'submitting') return state;
+            return { ...state, status: 'submitting' };
+        case 'track':
             return { ...state, status: 'submitting' };
         case 'pending':
             return { ...state, status: 'pending' };
@@ -153,9 +161,15 @@ export function resolveGenerationResponse(response) {
     const status = typeof body.status === 'string' ? body.status.trim().toLowerCase() : '';
     if (GENERATION_PENDING_STATUSES.has(status)) return { state: 'pending', generation: null };
     if (GENERATION_FAILED_STATUSES.has(status)) return { state: 'failed', generation: null };
+    const protectedResultPath = typeof body.id === 'string'
+        ? `/api/ai-studio/generations/${encodeURIComponent(body.id)}/result`
+        : null;
+    const isDurableJob = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.id || '');
+    const modelUrl = typeof body.modelUrl === 'string' ? body.modelUrl.trim() : '';
+    const isProtectedResult = modelUrl === protectedResultPath || modelUrl === `${protectedResultPath}#model.glb`;
     if (!GENERATION_COMPLETE_STATUSES.has(status)
-        || typeof body.modelUrl !== 'string'
-        || !body.modelUrl.trim()) {
+        || !modelUrl
+        || isDurableJob && !isProtectedResult) {
         return { state: 'invalid', generation: null };
     }
 
@@ -163,7 +177,11 @@ export function resolveGenerationResponse(response) {
         state: 'completed',
         generation: {
             ...body,
-            modelUrl: body.modelUrl.trim(),
+            // The protected legacy result endpoint serves GLB, but the endpoint
+            // itself has no file extension for ThreeDViewer's format detection.
+            modelUrl: isDurableJob && modelUrl === protectedResultPath
+                ? `${protectedResultPath}#model.glb`
+                : body.modelUrl.trim(),
             parts: Array.isArray(body.parts) ? body.parts : [],
             files: Array.isArray(body.files) ? body.files : [],
         },
@@ -187,7 +205,6 @@ export function createPrintDraftFromGeneration(generation, options = {}) {
         dimensions: generation.dimensions,
         faces: generation.faces,
         vertices: generation.vertices,
-        quality: generation.quality,
         parts: Array.isArray(generation.parts) ? generation.parts : undefined,
         modelColor: options.modelColor,
         partColors: options.partColors,

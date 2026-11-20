@@ -5,7 +5,7 @@
 // New code should import from features/auth/authStorage directly.
 // ─────────────────────────────────────────────
 
-import { authStorage } from '../features/auth/authStorage';
+import { authStorage } from '../features/auth/authStorage.js';
 
 export const isJwtExpired = (token) => authStorage.isTokenExpired(token);
 export const getStoredToken = () => authStorage.getToken();

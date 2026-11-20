@@ -16,6 +16,7 @@ test('only metadata supplied by the generation response is presented', () => {
         ['Faces', 0],
     ]);
     assert.deepEqual(getConfirmedGenerationMetadata({}), []);
+    assert.deepEqual(getConfirmedGenerationMetadata({ quality: 'High' }), []);
 });
 
 test('empty or malformed generation responses are not treated as completed models', () => {
@@ -27,11 +28,47 @@ test('empty or malformed generation responses are not treated as completed model
 });
 
 test('queued and processing responses remain pending without exposing a model', () => {
-    for (const status of ['queued', 'processing']) {
+    for (const status of ['PENDING', 'queued', 'PROCESSING']) {
         const result = presentation.resolveGenerationResponse?.({ status, modelUrl: '/model.glb' });
         assert.equal(result?.state, 'pending');
         assert.equal(result?.generation, null);
     }
+});
+
+test('durable completed jobs require their authenticated result route before reaching the viewer', () => {
+    const id = '123e4567-e89b-42d3-a456-426614174000';
+    const valid = presentation.resolveGenerationResponse({
+        id, status: 'COMPLETED', modelUrl: `/api/ai-studio/generations/${id}/result`,
+    });
+    const unprotected = presentation.resolveGenerationResponse({
+        id, status: 'COMPLETED', modelUrl: 'https://cdn.example.invalid/model.glb',
+    });
+    const mismatched = presentation.resolveGenerationResponse({
+        id, status: 'COMPLETED', modelUrl: '/api/ai-studio/generations/other/result',
+    });
+
+    assert.equal(valid.state, 'completed');
+    assert.equal(valid.generation.modelUrl, `/api/ai-studio/generations/${id}/result#model.glb`);
+    assert.equal(presentation.resolveGenerationResponse(valid.generation).generation.modelUrl, valid.generation.modelUrl);
+    assert.equal(unprotected.state, 'invalid');
+    assert.equal(mismatched.state, 'invalid');
+});
+
+test('server history refresh is owner scoped and retains completed jobs only', () => {
+    const ownerA = getGenerationOwnerKey({ id: 'account-a' });
+    const ownerB = getGenerationOwnerKey({ id: 'account-b' });
+    const current = createGenerationResultsState(ownerA);
+    const history = [
+        { id: '123e4567-e89b-42d3-a456-426614174000', status: 'COMPLETED',
+            modelUrl: '/api/ai-studio/generations/123e4567-e89b-42d3-a456-426614174000/result' },
+        { id: '123e4567-e89b-42d3-a456-426614174001', status: 'PENDING' },
+    ];
+    const loaded = generationResultsReducer(current, { type: 'history-loaded', ownerKey: ownerA, history });
+    const stale = generationResultsReducer(current, { type: 'history-loaded', ownerKey: ownerB, history });
+
+    assert.equal(loaded.history.length, 1);
+    assert.equal(loaded.history[0].status, 'COMPLETED');
+    assert.equal(stale, current);
 });
 
 test('pending generation blocks submission until an explicit new-request action', () => {
@@ -164,7 +201,7 @@ test('restored generation history accepts only completed models belonging to the
 });
 
 test('Print Quote draft is created only from a completed model with valid source dimensions', () => {
-    const completed = { id: 12, status: 'completed', title: 'Generated item', modelUrl: '/generated/model.glb', dimensions: '10 x 20 x 30 mm' };
+    const completed = { id: 12, status: 'completed', title: 'Generated item', modelUrl: '/generated/model.glb', dimensions: '10 x 20 x 30 mm', quality: 'Standard' };
     const pending = { ...completed, status: 'processing' };
     const missingDimensions = { ...completed, dimensions: undefined };
     const options = { productName: 'Generated item', partColors: {}, modelScale: { x: 100, y: 100, z: 100 } };

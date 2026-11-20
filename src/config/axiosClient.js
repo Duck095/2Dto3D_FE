@@ -5,4 +5,4 @@
 // New code should import from '../services/api/apiClient' directly.
 // ─────────────────────────────────────────────
 
-export { default } from '../services/api/apiClient';
+export { default } from '../services/api/apiClient.js';

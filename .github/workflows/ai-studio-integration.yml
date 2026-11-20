@@ -1,0 +1,235 @@
+name: AI Studio integration (isolated candidate)
+
+on:
+  push:
+    branches:
+      - codex/sys-ai-studio-ci-fe-candidate
+  workflow_dispatch:
+    inputs:
+      fe_sha:
+        description: Full 40-character FE candidate commit SHA
+        required: true
+        type: string
+      be_sha:
+        description: Full 40-character BE candidate commit SHA
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    name: AI Studio FE/BE integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ai_studio_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: TEST_ONLY_ci_disposable_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ai_studio_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      CI: "true"
+      TZ: UTC
+      AI_STUDIO_CI_DB_URL: jdbc:postgresql://localhost:5432/ai_studio_ci
+      AI_STUDIO_CI_DB_USERNAME: postgres
+      AI_STUDIO_CI_DB_PASSWORD: TEST_ONLY_ci_disposable_password
+
+    steps:
+      - name: Checkout FE at requested candidate SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'push' && github.sha || inputs.fe_sha }}
+          persist-credentials: false
+
+      - name: Validate exact source inputs
+        shell: bash
+        env:
+          FE_SHA: ${{ github.event_name == 'push' && github.sha || inputs.fe_sha }}
+          REQUESTED_BE_SHA: ${{ inputs.be_sha }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            BE_SHA=$(tr -d '\r\n' < ci/ai-studio-be-sha.txt)
+          else
+            BE_SHA="$REQUESTED_BE_SHA"
+          fi
+          [[ "$FE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'fe_sha must be a full lowercase 40-character SHA'; exit 1; }
+          [[ "$BE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo 'be_sha must be a full lowercase 40-character SHA'; exit 1; }
+          echo "BE_SHA=$BE_SHA" >> "$GITHUB_ENV"
+
+      - name: Fetch public BE candidate at requested SHA
+        shell: bash
+        env:
+          BE_SHA: ${{ env.BE_SHA }}
+        run: |
+          set -euo pipefail
+          git init backend
+          git -C backend remote add origin https://github.com/Duck095/2Dto3D_BE.git
+          git -C backend fetch --depth=1 origin "$BE_SHA"
+          git -C backend checkout --detach FETCH_HEAD
+          test "$(git -C backend rev-parse HEAD)" = "$BE_SHA"
+
+      - name: Verify FE SHA and Docker capacity
+        shell: bash
+        env:
+          FE_SHA: ${{ github.event_name == 'push' && github.sha || inputs.fe_sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$FE_SHA"
+          docker info >/dev/null
+          memory_bytes=$(awk '/MemTotal/ {print $2 * 1024}' /proc/meminfo)
+          cpu_count=$(nproc)
+          echo "Runner memory bytes: $memory_bytes"
+          echo "Runner CPU count: $cpu_count"
+          (( memory_bytes >= 4294967296 ))
+          (( cpu_count >= 2 ))
+          docker image inspect postgres:16 >/dev/null || true
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          cache-dependency-path: backend/pom.xml
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install frontend dependencies and browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Prepare backend test classpath
+        working-directory: backend
+        run: ./mvnw --batch-mode -DskipTests test-compile dependency:build-classpath '-Dmdep.outputFile=.mvn-target/ai-studio-ci-classpath.txt'
+
+      - name: Validate migrations
+        id: migrations
+        working-directory: backend
+        run: ./mvnw --batch-mode -Dtest=AiStudioCiMigrationBootstrapTest test
+
+      - name: Run focused BE HTTP, SQL, provider, GLB and Print Readiness tests
+        id: focused-be
+        working-directory: backend
+        run: ./mvnw --batch-mode -Dtest=MediaValidationServiceTest,AiGenerationGlbValidationTest,AiStudioFeatureGateConfigurationTest,TestOnlyRenderableGlbFixtureTest,DesignProjectHistoryHttpIntegrationTest,DesignProjectServiceTest,DesignPipelineCommandServiceTest,DesignPrintReadinessServiceTest,DesignPipelineModelWorkerPostgresTest,DesignPipelineReferenceWorkerPostgresTest,DesignUsageReservationPostgresConcurrencyTest test
+
+      - name: Start test-only Spring Boot API
+        working-directory: backend
+        env:
+          DB_URL: jdbc:postgresql://localhost:5432/ai_studio_ci
+          DB_PASSWORD: TEST_ONLY_ci_disposable_password
+          JWT_SECRET: TEST_ONLY_ci_jwt_secret_012345678901234567890123456789
+          VNPAY_CODE: TEST_ONLY
+          VNPAY_SECRET: TEST_ONLY
+          MOMO_PARTNER_CODE: TEST_ONLY
+          MOMO_ACCESS_KEY: TEST_ONLY
+          MOMO_SECRET_KEY: TEST_ONLY
+          CLOUD_NAME: TEST_ONLY
+          API_KEY: TEST_ONLY
+          API_SECRET: TEST_ONLY
+          SPRING_PROFILES_ACTIVE: ai-studio-ci
+          SPRING_FLYWAY_ENABLED: "false"
+          APP_FEATURES_AI_ENABLED: "true"
+          APP_DESIGN_WORKER_ENABLED: "true"
+          APP_DESIGN_WORKER_POLL_INTERVAL_MS: "250"
+          APP_DESIGN_USAGE_PER_JOB_UNITS: "100"
+          APP_DESIGN_USAGE_PER_OWNER_DAILY_UNITS: "1000"
+          APP_DESIGN_USAGE_GLOBAL_DAILY_UNITS: "10000"
+          APP_DESIGN_USAGE_REFERENCE_JOB_UNITS: "20"
+          APP_DESIGN_USAGE_MODEL_JOB_UNITS: "40"
+          AI_STUDIO_ARTIFACTS_BACKEND: filesystem
+          AI_STUDIO_ARTIFACTS_ROOT: ${{ runner.temp }}/ai-studio-ci-artifacts
+          AI_STUDIO_CI_ARTIFACT_ROOT: ${{ runner.temp }}/ai-studio-ci-artifacts
+          SERVER_ADDRESS: 127.0.0.1
+          SERVER_PORT: "8080"
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ai-studio-ci-logs" "$RUNNER_TEMP/ai-studio-ci-evidence"
+          classpath=".mvn-target/test-classes:.mvn-target/classes:$(cat .mvn-target/ai-studio-ci-classpath.txt)"
+          setsid java -Duser.timezone=UTC -cp "$classpath" com.exe.morphia3d.AiStudioCiTestApplication > "$RUNNER_TEMP/ai-studio-ci-logs/backend.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/ai-studio-ci-backend.pid"
+          for attempt in $(seq 1 90); do
+            if curl --silent --fail http://localhost:8080/v3/api-docs >/dev/null; then exit 0; fi
+            sleep 2
+          done
+            echo 'Test-only backend did not become ready'; tail -n 40 "$RUNNER_TEMP/ai-studio-ci-logs/backend.log"; exit 1
+
+      - name: Start Vite and run real HTTP Playwright acceptance
+        id: real-http-e2e
+        env:
+          CI_EVIDENCE_DIR: ${{ runner.temp }}/ai-studio-ci-evidence
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+          PLAYWRIGHT_CHANNEL: chromium
+          VITE_DISABLE_BROWSER_OPEN: "true"
+        run: |
+          set -euo pipefail
+          setsid npm run dev -- --host 127.0.0.1 --port 3000 --strictPort > "$RUNNER_TEMP/ai-studio-ci-logs/vite.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/ai-studio-ci-vite.pid"
+          for attempt in $(seq 1 45); do
+            if curl --silent --fail http://localhost:3000 >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --silent --fail http://localhost:3000 >/dev/null
+          npx playwright test --config=playwright.e2e.config.js --reporter=line playwright-e2e/ai-studio-real-integration.e2e.js
+
+      - name: Record source pair and test summary
+        if: always()
+        shell: bash
+        env:
+          FE_SHA: ${{ inputs.fe_sha }}
+          BE_SHA: ${{ inputs.be_sha }}
+          MIGRATION_OUTCOME: ${{ steps.migrations.outcome }}
+          FOCUSED_BE_OUTCOME: ${{ steps.focused-be.outcome }}
+          REAL_HTTP_OUTCOME: ${{ steps.real-http-e2e.outcome }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/ai-studio-ci-evidence"
+          {
+            echo "# AI Studio CI evidence"
+            echo
+            echo "- FE SHA: $FE_SHA"
+            echo "- BE SHA: $BE_SHA"
+            echo "- GitHub run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "- V1–V19 migration step: $MIGRATION_OUTCOME"
+            echo "- G3 / SQL / provider focused tests: $FOCUSED_BE_OUTCOME"
+            echo "- G2 real HTTP, Three.js GLB and fail-closed Print Readiness: $REAL_HTTP_OUTCOME"
+            echo "- Print Readiness expected reason: DIMENSION_EVIDENCE_MISSING"
+            echo "- PostgreSQL service and runner processes are disposable and scoped to this workflow job."
+          } > "$RUNNER_TEMP/ai-studio-ci-evidence/summary.md"
+          cat "$RUNNER_TEMP/ai-studio-ci-evidence/summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload CI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-studio-integration-evidence-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/ai-studio-ci-evidence
+            ${{ runner.temp }}/ai-studio-ci-evidence
+
+      - name: Stop test processes and remove disposable files
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          for pid_file in "$RUNNER_TEMP/ai-studio-ci-backend.pid" "$RUNNER_TEMP/ai-studio-ci-vite.pid"; do
+            if [[ -f "$pid_file" ]]; then kill -- "-$(cat "$pid_file")" 2>/dev/null || kill "$(cat "$pid_file")" 2>/dev/null; fi
+          done
+          rm -rf "$RUNNER_TEMP/ai-studio-ci-artifacts" "$RUNNER_TEMP/ai-studio-playwright-report" "$RUNNER_TEMP/staff-e2e-results" "$RUNNER_TEMP/ai-studio-ci-logs"
+          rm -f "$RUNNER_TEMP/ai-studio-ci-backend.pid" "$RUNNER_TEMP/ai-studio-ci-vite.pid"

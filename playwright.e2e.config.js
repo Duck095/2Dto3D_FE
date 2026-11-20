@@ -13,9 +13,9 @@ export default defineConfig({
   reporter: 'line',
   outputDir: resolve(process.env.RUNNER_TEMP || tmpdir(), 'staff-e2e-results'),
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:3000',
     browserName: 'chromium',
-    channel: 'msedge',
+    channel: process.env.PLAYWRIGHT_CHANNEL || 'msedge',
     headless: true,
     screenshot: 'off',
     video: 'off',
