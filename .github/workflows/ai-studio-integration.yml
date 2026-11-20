@@ -117,17 +117,17 @@ jobs:
 
       - name: Prepare backend test classpath
         working-directory: backend
-        run: ./mvnw --batch-mode -DskipTests test-compile dependency:build-classpath '-Dmdep.outputFile=.mvn-target/ai-studio-ci-classpath.txt'
+        run: bash ./mvnw --batch-mode -DskipTests test-compile dependency:build-classpath '-Dmdep.outputFile=.mvn-target/ai-studio-ci-classpath.txt'
 
       - name: Validate migrations
         id: migrations
         working-directory: backend
-        run: ./mvnw --batch-mode -Dtest=AiStudioCiMigrationBootstrapTest test
+        run: bash ./mvnw --batch-mode -Dtest=AiStudioCiMigrationBootstrapTest test
 
       - name: Run focused BE HTTP, SQL, provider, GLB and Print Readiness tests
         id: focused-be
         working-directory: backend
-        run: ./mvnw --batch-mode -Dtest=MediaValidationServiceTest,AiGenerationGlbValidationTest,AiStudioFeatureGateConfigurationTest,TestOnlyRenderableGlbFixtureTest,DesignProjectHistoryHttpIntegrationTest,DesignProjectServiceTest,DesignPipelineCommandServiceTest,DesignPrintReadinessServiceTest,DesignPipelineModelWorkerPostgresTest,DesignPipelineReferenceWorkerPostgresTest,DesignUsageReservationPostgresConcurrencyTest test
+        run: bash ./mvnw --batch-mode -Dtest=MediaValidationServiceTest,AiGenerationGlbValidationTest,AiStudioFeatureGateConfigurationTest,TestOnlyRenderableGlbFixtureTest,DesignProjectHistoryHttpIntegrationTest,DesignProjectServiceTest,DesignPipelineCommandServiceTest,DesignPrintReadinessServiceTest,DesignPipelineModelWorkerPostgresTest,DesignPipelineReferenceWorkerPostgresTest,DesignUsageReservationPostgresConcurrencyTest test
 
       - name: Start test-only Spring Boot API
         working-directory: backend
